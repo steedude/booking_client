@@ -16,11 +16,15 @@
           <div>歷史預約時段</div>
           <div>...</div>
         </div>
+
+        <reservation-schedule />
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ReservationSchedule from '@/components/reservationPage/ReservationSchedule.vue';
+</script>
 
 <style scoped lang="postcss"></style>
