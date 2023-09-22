@@ -1,50 +1,62 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="ruleForm"
-    status-icon
-    :rules="rules"
-    label-width="120px"
-  >
-    <el-form-item
-      label="Username"
-      prop="username"
-    >
-      <el-input v-model="ruleForm.username" />
-    </el-form-item>
-
-    <el-form-item
-      label="Password"
-      prop="password"
-    >
-      <el-input
-        v-model="ruleForm.password"
-        type="password"
-        autocomplete="off"
-      />
-    </el-form-item>
-
-    <el-form-item
-      v-if="!props.isLogin"
-      label="Confirm"
-      prop="checkPass"
-    >
-      <el-input
-        v-model="ruleForm.checkPass"
-        type="password"
-        autocomplete="off"
-      />
-    </el-form-item>
-
-    <el-form-item>
-      <el-button
-        type="primary"
-        @click="submitForm(ruleFormRef)"
-        >Submit</el-button
+  <el-card>
+    <template #header>
+      <div class="mb-2">
+        {{ props.isLogin ? '登入帳號' : '註冊帳號' }}
+      </div>
+      <el-form
+        ref="ruleFormRef"
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        label-width="120px"
       >
-      <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
-    </el-form-item>
-  </el-form>
+        <el-form-item
+          label="Username"
+          prop="username"
+        >
+          <el-input v-model="ruleForm.username" />
+        </el-form-item>
+
+        <el-form-item
+          label="Password"
+          prop="password"
+        >
+          <el-input
+            v-model="ruleForm.password"
+            type="password"
+            autocomplete="off"
+          />
+        </el-form-item>
+
+        <el-form-item
+          v-if="!props.isLogin"
+          label="Confirm"
+          prop="checkPass"
+        >
+          <el-input
+            v-model="ruleForm.checkPass"
+            type="password"
+            autocomplete="off"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="submitForm(ruleFormRef)"
+          >
+            {{ props.isLogin ? '登入' : '註冊' }}
+          </el-button>
+          <el-button @click="resetForm(ruleFormRef)">清除</el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+    <template #default>
+      <div class="mb-2">或用 Google 登入</div>
+      <slot />
+    </template>
+  </el-card>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import vue3GoogleLogin from 'vue3-google-login';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import 'virtual:svg-icons-register';
 
@@ -22,4 +23,9 @@ pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
 app.use(i18NPlugin);
+
+app.use(vue3GoogleLogin, {
+  clientId: import.meta.env.VITE_GOOGLE_APP_ID,
+});
+
 app.mount('#app');
