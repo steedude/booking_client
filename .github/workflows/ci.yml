@@ -2,7 +2,7 @@ name: CI-Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'src/**'
       - 'pnpm-lock.yaml'

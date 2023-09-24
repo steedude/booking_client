@@ -22,7 +22,7 @@
 import { ElMessage, ElNotification } from 'element-plus';
 import AuthForm from '@/components/authPage/AuthForm.vue';
 import { useUserStore } from '@/stores';
-const { loginUser } = useUserStore();
+const { loginUser, loginUserByGoogle } = useUserStore();
 import { LoginPayload } from '@/types/user';
 import router from '@/router';
 async function onLogin(formData: LoginPayload) {
@@ -57,10 +57,20 @@ async function onRegister(formData: LoginPayload) {
   }
 }
 
-const callback = (response: any) => {
-  // This callback will be triggered when the user selects or login to
-  // his Google account from the popup
-  console.log('Handle the response', response);
+const callback = async (response: any) => {
+  try {
+    const { credential } = response;
+    console.log('credential:', credential);
+    await loginUserByGoogle({ credential });
+    await router.push('/');
+  } catch (error: any) {
+    const message = error?.response.data.errorMessage || '認證錯誤';
+    ElMessage.error({
+      message,
+      type: 'error',
+      appendTo: '#app',
+    });
+  }
 };
 </script>
 

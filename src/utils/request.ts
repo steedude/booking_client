@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores';
 
+declare module 'axios' {
+  interface ResponseResult {
+    status: number;
+    message: string;
+    data: Record<string, string>;
+  }
+
+  export interface AxiosResponse extends ResponseResult {}
+}
+
 const baseURL = import.meta.env.VITE_API_URL;
 const axiosInstance = axios.create({ baseURL });
 

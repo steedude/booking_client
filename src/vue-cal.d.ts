@@ -186,7 +186,7 @@ declare module 'vue-cal' {
        If minCellWidth is also set, minSplitWidth will override it on week view. */
     minSplitWidth?: number; // default?: 0 // In pixels.
     onEventClick?: Function; // default?: null
-    onEventCreate?: Function; // default?: null
+    onEventCreate?: (event: Event, deleteEventFunction: () => {}) => Event; // default?: null
     onEventDblclick?: Function; // default?: null
     overlapsPerTimeStep?: boolean; // default?: false
     resizeX?: boolean; // default?: false
