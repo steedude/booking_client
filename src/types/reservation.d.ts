@@ -1,13 +1,11 @@
-import type { User } from '@/types/user';
 import type { Product } from '@/types/product';
 
 export interface Reservation {
-  id: string;
+  _id: string;
   start_time: string;
   end_time: string;
   confirmed: boolean;
   product: Product;
-  user: User;
   team: string;
 }
 

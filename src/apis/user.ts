@@ -12,3 +12,11 @@ export function logoutUserApi() {
 export function googleAuthApi(data: GoogleAuthPayload) {
   return request.post('/api/googleAuth', data);
 }
+
+export function registerUserApi(data: LoginPayload) {
+  return request.post('/api/register', data);
+}
+
+export function getUserInfoApi() {
+  return request.get('/api/user');
+}

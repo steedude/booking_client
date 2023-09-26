@@ -1,7 +1,7 @@
 export interface User {
   id: string;
   name: string;
-  username: string;
+  account: string;
   team: string;
 }
 
@@ -10,6 +10,6 @@ export interface GoogleAuthPayload {
 }
 
 export interface LoginPayload {
-  username: string;
+  account: string;
   password: string;
 }

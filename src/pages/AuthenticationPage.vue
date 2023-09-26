@@ -22,7 +22,7 @@
 import { ElMessage, ElNotification } from 'element-plus';
 import AuthForm from '@/components/authPage/AuthForm.vue';
 import { useUserStore } from '@/stores';
-const { loginUser, loginUserByGoogle } = useUserStore();
+const { loginUser, loginUserByGoogle, registerUser } = useUserStore();
 import { LoginPayload } from '@/types/user';
 import router from '@/router';
 async function onLogin(formData: LoginPayload) {
@@ -45,7 +45,7 @@ async function onLogin(formData: LoginPayload) {
 
 async function onRegister(formData: LoginPayload) {
   try {
-    await loginUser(formData);
+    await registerUser(formData);
     await router.push('/');
   } catch (error: any) {
     const message = error?.response.data.errorMessage || '認證錯誤';

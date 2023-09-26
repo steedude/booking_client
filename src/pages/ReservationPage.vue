@@ -30,7 +30,7 @@
           width="20%"
           align-center
         >
-          <p>會議室： {{ currentReservation?.split }}</p>
+          <p>會議室： {{ productMap[currentReservation?.split ?? '']?.name }}</p>
           <p>開始時間： {{ formatTime(currentReservation?.start) }}</p>
           <p>結束時間： {{ formatTime(currentReservation?.end) }}</p>
           <template #footer>
@@ -55,6 +55,8 @@
 import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { Event } from 'vue-cal';
+import { storeToRefs } from 'pinia';
+import { useProductStore } from '@/stores';
 import ReservationSchedule from '@/components/reservationPage/ReservationSchedule.vue';
 import { fetchReservationsApi, postReservationApi } from '@/apis/reservation';
 import { formatTime } from '@/utils/moment';
@@ -66,6 +68,7 @@ const currentReservation = ref<Event>();
 const isLoading = ref(false);
 const isShowConfirmPopup = ref(false);
 const isReserving = ref(false);
+const { productMap } = storeToRefs(useProductStore());
 
 function fetchReservations() {
   isLoading.value = true;
@@ -89,10 +92,11 @@ function closeConfirmPopup() {
 }
 
 function reserveMeetingRoom() {
+  const { start, end, split } = currentReservation.value ?? {};
   const postData = {
-    start_time: formatTime(currentReservation.value?.start),
-    end_time: formatTime(currentReservation.value?.end),
-    product_id: '1',
+    start_time: formatTime(start),
+    end_time: formatTime(end),
+    product_id: split?.toString() ?? '',
   };
 
   isReserving.value = true;
@@ -123,6 +127,7 @@ function disabledDate(date: Date) {
   return date < now;
 }
 
+useProductStore().fetchProducts();
 onMounted(fetchReservations);
 </script>
 

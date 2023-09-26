@@ -12,7 +12,7 @@
     :drag-to-create-threshold="0"
     :min-split-width="200"
     :min-event-width="100"
-    :split-days="teams"
+    :split-days="products"
     :sticky-split-labels="true"
     :events="booked"
     :on-event-create="onCreateReservation"
@@ -26,6 +26,7 @@ import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import VueCal, { type Event } from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+import { useProductStore } from '@/stores';
 import type { Reservation } from '@/types/reservation';
 
 interface Props {
@@ -36,23 +37,22 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:currentReservation']);
-const teams = [
-  { id: 'A', class: 'a', label: 'A' },
-  { id: 'B', class: 'b', label: 'B' },
-  { id: 'C', class: 'c', label: 'C' },
-  { id: 'D', class: 'd', label: 'D' },
-  { id: 'E', class: 'e', label: 'E' },
-  { id: 'F', class: 'f', label: 'F' },
-];
 const deleteReservation = ref<() => void>();
+const products = computed(() => {
+  return useProductStore().products.map(({ _id: id, name }) => {
+    return { id, label: name };
+  });
+});
 const booked = computed(() => {
   return props.events.map(event => {
+    const { _id: productId } = event.product;
+
     return {
       start: event.start_time,
       end: event.end_time,
-      title: event.user.team,
+      title: event.team,
       class: 'booked',
-      split: event.product.name,
+      split: productId,
       resizing: false,
     };
   });
@@ -67,6 +67,14 @@ function onCreateReservation(event: Event, deleteEvent: () => void): Event | nul
 
 function onDragCreateReservation(event: Event) {
   const { start, end, split } = event;
+  if (start.valueOf() === end.valueOf()) {
+    ElMessage({
+      message: 'The appointment time cannot be less than 30 minutes',
+      type: 'error',
+    });
+    deleteReservation.value?.();
+    return;
+  }
   const bookedEvent = booked.value.find(book => book.split === split);
 
   if (!bookedEvent) return;
@@ -85,23 +93,23 @@ function onDragCreateReservation(event: Event) {
 
 <style lang="postcss" scoped>
 :deep(.vuecal__cell-split) {
-  &.a {
-    @apply bg-blue-100;
+  &:nth-of-type(1) {
+    @apply bg-blue-100/50;
   }
-  &.b {
-    @apply bg-pink-100;
+  &:nth-of-type(2) {
+    @apply bg-pink-100/50;
   }
-  &.c {
-    @apply bg-green-100;
+  &:nth-of-type(3) {
+    @apply bg-green-100/50;
   }
-  &.d {
-    @apply bg-yellow-100;
+  &:nth-of-type(4) {
+    @apply bg-yellow-100/50;
   }
-  &.e {
-    @apply bg-orange-100;
+  &:nth-of-type(5) {
+    @apply bg-orange-100/50;
   }
-  &.f {
-    @apply bg-gray-100;
+  &:nth-of-type(6) {
+    @apply bg-gray-100/50;
   }
 }
 
