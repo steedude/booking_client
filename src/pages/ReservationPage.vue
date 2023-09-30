@@ -21,7 +21,7 @@
           type="primary"
           size="large"
           :disabled="isLoading || !currentReservation"
-          @click="isShowConfirmPopup = true"
+          @click="showConfirmPopup"
           >預約會議室</el-button
         >
         <el-dialog
@@ -56,7 +56,7 @@ import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { Event } from 'vue-cal';
 import { storeToRefs } from 'pinia';
-import { useProductStore } from '@/stores';
+import { useProductStore, useUserStore } from '@/stores';
 import ReservationSchedule from '@/components/reservationPage/ReservationSchedule.vue';
 import { fetchReservationsApi, postReservationApi } from '@/apis/reservation';
 import { formatTime } from '@/utils/moment';
@@ -75,6 +75,7 @@ function fetchReservations() {
   fetchReservationsApi({ start_time: formatTime(day.value) })
     .then(({ data }) => {
       reservations.value = data.reservations;
+      currentReservation.value = undefined;
     })
     .catch(error => {
       ElMessage({
@@ -85,6 +86,22 @@ function fetchReservations() {
     .finally(() => {
       isLoading.value = false;
     });
+}
+
+function showConfirmPopup() {
+  const { team } = useUserStore();
+
+  if (!team) {
+    ElMessageBox.confirm('組別尚未設置, 跳轉至個人詳情設置組別？', '提示', {
+      confirmButtonText: '確認',
+      cancelButtonText: '取消',
+      center: true,
+    }).then(() => {
+      console.log('router 跳轉');
+    });
+    return;
+  }
+  isShowConfirmPopup.value = true;
 }
 
 function closeConfirmPopup() {

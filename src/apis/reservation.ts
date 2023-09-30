@@ -2,7 +2,7 @@ import request from '@/utils/request';
 import type { FetchReservationsPayload, PostReservationPayload } from '@/types/reservation';
 
 export function fetchReservationsApi(data: FetchReservationsPayload) {
-  return request.get('/reservations', { params: data });
+  return request.get('/reservations/day', { params: data });
 }
 
 export function postReservationApi(data: PostReservationPayload) {

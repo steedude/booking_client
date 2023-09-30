@@ -27,6 +27,7 @@ import { ElMessage } from 'element-plus';
 import VueCal, { type Event } from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import { useProductStore } from '@/stores';
+import { formatTime } from '@/utils/moment';
 import type { Reservation } from '@/types/reservation';
 
 interface Props {
@@ -48,8 +49,8 @@ const booked = computed(() => {
     const { _id: productId } = event.product;
 
     return {
-      start: event.start_time,
-      end: event.end_time,
+      start: formatTime(event.start_time),
+      end: formatTime(event.end_time),
       title: event.team,
       class: 'booked',
       split: productId,
@@ -68,11 +69,11 @@ function onCreateReservation(event: Event, deleteEvent: () => void): Event | nul
 function onDragCreateReservation(event: Event) {
   const { start, end, split } = event;
   if (start.valueOf() === end.valueOf()) {
-    ElMessage({
-      message: 'The appointment time cannot be less than 30 minutes',
-      type: 'error',
-    });
-    deleteReservation.value?.();
+    removeReservation('The appointment time cannot be less than 30 minutes');
+    return;
+  }
+  if (start < new Date()) {
+    removeReservation('Unable to reserve time in the past');
     return;
   }
   const bookedEvent = booked.value.find(book => book.split === split);
@@ -82,12 +83,14 @@ function onDragCreateReservation(event: Event) {
   const bookedEnd = new Date(bookedEvent.end);
 
   if ((start <= bookedStart && end > bookedStart) || (start < bookedEnd && end >= bookedEnd)) {
-    ElMessage({
-      message: 'Time period overlap',
-      type: 'error',
-    });
-    deleteReservation.value?.();
+    removeReservation('Time period overlap');
   }
+}
+
+function removeReservation(message: string) {
+  ElMessage({ message, type: 'error' });
+  deleteReservation.value?.();
+  emit('update:currentReservation', undefined);
 }
 </script>
 

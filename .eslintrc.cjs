@@ -24,6 +24,12 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'comma-dangle': ['error', 'only-multiline'],
     'max-len': ['error', { code: 120 }],
+    'no-use-before-define': [
+      'error',
+      {
+        functions: false,
+      },
+    ],
     '@typescript-eslint/no-shadow': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '_' }],
   },
