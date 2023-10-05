@@ -3,6 +3,7 @@ export interface User {
   name: string;
   account: string;
   team: string;
+  image: string;
 }
 
 export interface GoogleAuthPayload {
@@ -12,4 +13,9 @@ export interface GoogleAuthPayload {
 export interface LoginPayload {
   account: string;
   password: string;
+}
+
+export interface UserInfoPayload {
+  team: string;
+  name: string;
 }

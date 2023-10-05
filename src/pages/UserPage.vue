@@ -3,15 +3,19 @@
     <div>
       <h1>User Page</h1>
     </div>
+
     <div class="w-full h-full flex justify-center items-center">
-      <div class="flex flex-col justify-center items-center">
-        <DescriptionBox
-          ref="descriptionBox"
-          :account="userStore.account"
-          :name="userStore.name"
-          :team="userStore.team"
-        />
-      </div>
+      <img
+        :src="userStore.image"
+        class="h-32 w-32 rounded-full mx-6"
+      />
+      <DescriptionBox
+        ref="descriptionBox"
+        :account="userStore.account"
+        :name="userStore.name"
+        :team="userStore.team"
+        :set-user-info="userStore.setUserInfo"
+      />
     </div>
   </div>
 </template>
