@@ -6,7 +6,7 @@ import { LoginPayload, GoogleAuthPayload, UserInfoPayload } from '@/types/user';
 import { User } from '@/types/user';
 
 const DEFAULT_IMAGE = 'https://randomuser.me/api/portraits/lego/0.jpg';
-const DEFAULT_TEAM = '未設定';
+const DEFAULT_TEAM = '';
 
 export default defineStore(
   'user',

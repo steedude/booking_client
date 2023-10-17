@@ -18,7 +18,13 @@
     :on-event-create="onCreateReservation"
     class="vuecal--green-theme"
     @event-drag-create="onDragCreateReservation"
-  ></vue-cal>
+  >
+    <template #title="{ view }">
+      {{ view.startDate.getFullYear() }}-{{ `${view.startDate.getMonth() + 1}`.padStart(2, '0') }}-{{
+        `${view.startDate.getDate()}`.padStart(2, '0')
+      }}
+    </template>
+  </vue-cal>
 </template>
 
 <script setup lang="ts">
@@ -68,7 +74,7 @@ function onCreateReservation(event: Event, deleteEvent: () => void): Event | nul
 
 function onDragCreateReservation(event: Event) {
   const { start, end, split } = event;
-  if (start.valueOf() === end.valueOf()) {
+  if (+end.valueOf() - +start.valueOf() < 30 * 60 * 1000) {
     removeReservation('The appointment time cannot be less than 30 minutes');
     return;
   }

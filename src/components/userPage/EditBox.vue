@@ -25,12 +25,12 @@
 import { ref } from 'vue';
 
 const emit = defineEmits(['save']);
-const props = defineProps<{
+defineProps<{
   value: String;
 }>();
 
 const isEditing = ref(false);
-const localValue = ref(props.value);
+const localValue = ref('');
 
 function toggleEditing() {
   if (isEditing.value) {

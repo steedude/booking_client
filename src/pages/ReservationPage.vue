@@ -46,6 +46,10 @@
             </span>
           </template>
         </el-dialog>
+        <user-info-setting-popup
+          v-model="isShowSetUserInfoPopup"
+          @set-team-done="showConfirmPopup"
+        />
       </div>
     </div>
   </div>
@@ -58,6 +62,7 @@ import type { Event } from 'vue-cal';
 import { storeToRefs } from 'pinia';
 import { useProductStore, useUserStore } from '@/stores';
 import ReservationSchedule from '@/components/reservationPage/ReservationSchedule.vue';
+import UserInfoSettingPopup from '@/components/reservationPage/UserInfoSettingPopup.vue';
 import { fetchReservationsApi, postReservationApi } from '@/apis/reservation';
 import { formatTime } from '@/utils/moment';
 import type { Reservation } from '@/types/reservation';
@@ -67,8 +72,10 @@ const reservations = ref<Reservation[]>([]);
 const currentReservation = ref<Event>();
 const isLoading = ref(false);
 const isShowConfirmPopup = ref(false);
+const isShowSetUserInfoPopup = ref(false);
 const isReserving = ref(false);
 const { productMap } = storeToRefs(useProductStore());
+const userStore = useUserStore();
 
 function fetchReservations() {
   isLoading.value = true;
@@ -89,16 +96,8 @@ function fetchReservations() {
 }
 
 function showConfirmPopup() {
-  const { team } = useUserStore();
-
-  if (!team) {
-    ElMessageBox.confirm('組別尚未設置, 跳轉至個人詳情設置組別？', '提示', {
-      confirmButtonText: '確認',
-      cancelButtonText: '取消',
-      center: true,
-    }).then(() => {
-      console.log('router 跳轉');
-    });
+  if (userStore.team === '') {
+    isShowSetUserInfoPopup.value = true;
     return;
   }
   isShowConfirmPopup.value = true;
