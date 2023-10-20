@@ -16,6 +16,11 @@ export interface LoginPayload {
 }
 
 export interface UserInfoPayload {
-  team: string;
+  team_id: string;
+  name: string;
+}
+
+export interface TeamOption {
+  _id: string;
   name: string;
 }

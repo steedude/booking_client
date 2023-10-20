@@ -31,10 +31,10 @@ export default defineStore(
       image.value = serverUserData.image || DEFAULT_IMAGE;
     }
 
-    async function setUserInfo(nameStr: string | null, teamStr: string | null) {
+    async function setUserInfo(nameStr: string | null, teamId: string | null) {
       const userInfo = {} as UserInfoPayload;
       if (nameStr) userInfo.name = nameStr;
-      if (teamStr) userInfo.team = teamStr;
+      if (teamId) userInfo.team_id = teamId;
       const res = await setUserInfoApi(userInfo);
       const { user } = res.data;
       setUserValueByData(user);

@@ -1,19 +1,19 @@
 <template>
   <div class="edit-box">
-    <el-input
-      v-if="!isEditing"
-      :value="value"
-      disabled
-      class="edit-box-input"
-    ></el-input>
-    <el-input
-      v-else
-      v-model="localValue"
-      class="edit-box-input"
-    ></el-input>
+    <slot
+      name="default"
+      :is-editing="isEditing"
+    >
+      <el-input
+        v-model="localValue"
+        :disabled="!isEditing"
+        class="edit-box-input"
+      />
+    </slot>
     <el-button
       type="primary"
       class="edit-box-button"
+      :disabled="Boolean(disabled) && !isEditing"
       @click="toggleEditing"
     >
       {{ isEditing ? 'Save' : 'Edit' }}
@@ -24,17 +24,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const emit = defineEmits(['save']);
-defineProps<{
-  value: String;
+const emit = defineEmits(['save', 'edit']);
+const props = defineProps<{
+  value: string;
+  disabled?: boolean | undefined;
 }>();
 
 const isEditing = ref(false);
-const localValue = ref('');
+const localValue = ref(props.value);
 
 function toggleEditing() {
   if (isEditing.value) {
     emit('save', localValue.value);
+  } else {
+    emit('edit');
   }
   isEditing.value = !isEditing.value;
 }

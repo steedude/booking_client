@@ -1,7 +1,7 @@
 <template>
-  <div class="flex h-screen w-screen">
+  <div class="flex h-full w-full">
     <SideBar />
-    <div class="h-full w-full">
+    <div class="h-full w-full overflow-x-hidden">
       <div class="p-4 flex justify-between">
         <AppBreadcrumb />
         <div

@@ -37,28 +37,47 @@
       align="center"
     >
       <EditBox
+        v-slot="{ isEditing }"
         :value="team"
-        @save="setTeamFunc"
-      />
+        :disabled="Boolean(team)"
+        @save="setTeamFunc(teamId)"
+        @edit="getTeamOptions"
+      >
+        <team-selector
+          ref="teamSelectorElement"
+          v-model="teamId"
+          :placeholder="props.team || '尚未設置'"
+          :disabled="!isEditing"
+        />
+      </EditBox>
     </el-descriptions-item>
   </el-descriptions>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import EditBox from '@/components/userPage/EditBox.vue';
+import TeamSelector from '@/components/common/TeamSelector.vue';
 
 const props = defineProps<{
-  account: String;
-  name: String;
-  team: String;
+  account: string;
+  name: string;
+  team: string;
   setUserInfo: Function;
 }>();
 
-function setNameFunc(name: String) {
+const teamSelectorElement = ref();
+const teamId = ref('');
+
+function setNameFunc(name: string) {
   props.setUserInfo(name);
 }
 
-function setTeamFunc(team: String) {
+function getTeamOptions() {
+  teamSelectorElement.value.getTeamOptions();
+}
+
+function setTeamFunc(team: string) {
   props.setUserInfo(null, team);
 }
 </script>

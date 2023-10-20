@@ -16,7 +16,7 @@
     :sticky-split-labels="true"
     :events="booked"
     :on-event-create="onCreateReservation"
-    class="vuecal--green-theme"
+    class="vuecal--green-theme w-full"
     @event-drag-create="onDragCreateReservation"
   >
     <template #title="{ view }">
@@ -73,7 +73,8 @@ function onCreateReservation(event: Event, deleteEvent: () => void): Event | nul
 }
 
 function onDragCreateReservation(event: Event) {
-  const { start, end, split } = event;
+  const { start, end } = event;
+
   if (+end.valueOf() - +start.valueOf() < 30 * 60 * 1000) {
     removeReservation('The appointment time cannot be less than 30 minutes');
     return;
@@ -82,15 +83,19 @@ function onDragCreateReservation(event: Event) {
     removeReservation('Unable to reserve time in the past');
     return;
   }
-  const bookedEvent = booked.value.find(book => book.split === split);
+  if (isBooked(event)) removeReservation('Time period overlap');
+}
 
-  if (!bookedEvent) return;
-  const bookedStart = new Date(bookedEvent.start);
-  const bookedEnd = new Date(bookedEvent.end);
+function isBooked({ start, end, split }: Event) {
+  const bookedEvents = booked.value.filter(book => book.split === split);
 
-  if ((start <= bookedStart && end > bookedStart) || (start < bookedEnd && end >= bookedEnd)) {
-    removeReservation('Time period overlap');
-  }
+  if (!bookedEvents.length) return false;
+  return bookedEvents.some(event => {
+    const bookedStart = new Date(event.start);
+    const bookedEnd = new Date(event.end);
+
+    return (start <= bookedStart && end > bookedStart) || (start < bookedEnd && end >= bookedEnd);
+  });
 }
 
 function removeReservation(message: string) {
@@ -102,23 +107,20 @@ function removeReservation(message: string) {
 
 <style lang="postcss" scoped>
 :deep(.vuecal__cell-split) {
-  &:nth-of-type(1) {
+  &:nth-of-type(1n) {
     @apply bg-blue-100/50;
   }
-  &:nth-of-type(2) {
+  &:nth-of-type(2n) {
     @apply bg-pink-100/50;
   }
-  &:nth-of-type(3) {
+  &:nth-of-type(3n) {
     @apply bg-green-100/50;
   }
-  &:nth-of-type(4) {
+  &:nth-of-type(4n) {
     @apply bg-yellow-100/50;
   }
-  &:nth-of-type(5) {
+  &:nth-of-type(5n) {
     @apply bg-orange-100/50;
-  }
-  &:nth-of-type(6) {
-    @apply bg-gray-100/50;
   }
 }
 
@@ -135,5 +137,13 @@ function removeReservation(message: string) {
 
 :deep(.vuecal__arrow) {
   @apply hidden;
+}
+
+:deep(.vuecal__event-title) {
+  @apply text-sm text-ellipsis overflow-hidden whitespace-nowrap;
+}
+
+:deep(.vuecal__event-time) {
+  @apply font-normal text-sm;
 }
 </style>

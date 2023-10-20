@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full h-full">
+  <div class="h-full w-full">
     <h1>Skyline 會議室預約系統</h1>
-    <div class="w-full flex justify-center items-center py-10">
-      <div class="flex flex-col justify-center items-center gap-5">
+    <div class="flex justify-center items-center py-10">
+      <div class="w-full flex flex-col justify-center items-center gap-5 px-10">
         <el-date-picker
           v-model="day"
           type="date"
@@ -47,7 +47,7 @@
           </template>
         </el-dialog>
         <user-info-setting-popup
-          v-model="isShowSetUserInfoPopup"
+          v-model="isShowUserInfoSettingPopup"
           @set-team-done="showConfirmPopup"
         />
       </div>
@@ -72,7 +72,7 @@ const reservations = ref<Reservation[]>([]);
 const currentReservation = ref<Event>();
 const isLoading = ref(false);
 const isShowConfirmPopup = ref(false);
-const isShowSetUserInfoPopup = ref(false);
+const isShowUserInfoSettingPopup = ref(false);
 const isReserving = ref(false);
 const { productMap } = storeToRefs(useProductStore());
 const userStore = useUserStore();
@@ -95,12 +95,12 @@ function fetchReservations() {
     });
 }
 
-function showConfirmPopup() {
-  if (userStore.team === '') {
-    isShowSetUserInfoPopup.value = true;
+async function showConfirmPopup() {
+  if (userStore.team !== '') {
+    isShowConfirmPopup.value = true;
     return;
   }
-  isShowConfirmPopup.value = true;
+  isShowUserInfoSettingPopup.value = true;
 }
 
 function closeConfirmPopup() {

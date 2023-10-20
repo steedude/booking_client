@@ -1,31 +1,34 @@
 <template>
   <el-dialog
     v-model="showUserInfoSettingPopup"
-    title="組別尚未設置，置組別繼續完成預約。"
+    class="max-w-fit"
+    title="組別尚未設置，設置組別繼續完成預約。"
     align-center
+    center
+    @open="getTeamOptions"
   >
     <el-form
       ref="userFormRef"
       :model="userForm"
-      class="w-96"
     >
       <el-form-item
         label="組別"
         :rules="teamRules"
-        prop="teamName"
-        label-width="100px"
+        prop="team"
+        label-width="60px"
       >
-        <el-input
-          v-model="userForm.teamName"
-          autocomplete="off"
+        <team-selector
+          ref="teamSelectorElement"
+          v-model="userForm.team"
+          placeholder="尚未設置"
         />
       </el-form-item>
       <el-form-item
         label="暱稱"
-        label-width="100px"
+        label-width="60px"
       >
         <el-input
-          v-model="userForm.userName"
+          v-model="userForm.name"
           autocomplete="off"
         />
       </el-form-item>
@@ -45,14 +48,16 @@
 <script lang="ts" setup>
 import { ref, reactive, computed } from 'vue';
 import { useUserStore } from '@/stores';
+import TeamSelector from '@/components/common/TeamSelector.vue';
 import type { FormInstance } from 'element-plus';
 
 const userStore = useUserStore();
 
+const teamSelectorElement = ref();
 const userFormRef = ref<FormInstance>();
 const userForm = reactive({
-  userName: userStore.name,
-  teamName: '',
+  name: userStore.name,
+  team: '',
 });
 
 const teamRules = [{ required: true, message: '組別為必填欄位' }];
@@ -67,12 +72,16 @@ const showUserInfoSettingPopup = computed({
   set: value => emit('update:modelValue', value),
 });
 
+function getTeamOptions() {
+  teamSelectorElement.value.getTeamOptions();
+}
+
 function setTeam(userFormInstance: FormInstance | undefined) {
   if (!userFormInstance) return;
   userFormInstance.validate(async valid => {
     if (!valid) return;
-    const userName = userForm.userName === '' || userForm.userName === userStore.name ? null : userForm.userName;
-    await userStore.setUserInfo(userName, userForm.teamName);
+    const name = userForm.name === '' || userForm.name === userStore.name ? null : userForm.name;
+    await userStore.setUserInfo(name, userForm.team);
     showUserInfoSettingPopup.value = false;
     emit('setTeamDone');
   });

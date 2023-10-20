@@ -13,7 +13,7 @@
         ref="descriptionBox"
         :account="userStore.account"
         :name="userStore.name"
-        :team="userStore.team === '' ? '尚未設置' : userStore.team"
+        :team="userStore.team"
         :set-user-info="userStore.setUserInfo"
       />
     </div>

@@ -1,7 +1,7 @@
 <template>
   <div
     id="root-div"
-    class=""
+    class="h-screen w-screen"
   >
     <router-view />
   </div>

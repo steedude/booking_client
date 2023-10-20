@@ -24,3 +24,7 @@ export function getUserInfoApi() {
 export function setUserInfoApi(data: UserInfoPayload) {
   return request.post('/userSetting', data);
 }
+
+export function getTeamOptionsApi() {
+  return request.get('/teams');
+}
