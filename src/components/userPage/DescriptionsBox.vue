@@ -1,6 +1,6 @@
 <template>
   <el-descriptions
-    class="w-1/2"
+    class="w-3/4"
     :column="2"
     border
   >

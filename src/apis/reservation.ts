@@ -8,3 +8,15 @@ export function fetchReservationsApi(data: FetchReservationsPayload) {
 export function postReservationApi(data: PostReservationPayload) {
   return request.post('/reservation', data);
 }
+
+export function fetchFutureReservationsApi() {
+  return request.get('/reservations/future');
+}
+
+export function fetchHistoryReservationsApi() {
+  return request.get('/reservations/history');
+}
+
+export function deleteReservationsApi(reservationId: string) {
+  return request.delete(`/reservation/${reservationId}`);
+}

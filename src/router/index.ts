@@ -4,6 +4,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout.vue';
 
 import ReservationPage from '@/pages/ReservationPage.vue';
 import AuthenticationPage from '@/pages/AuthenticationPage.vue';
+import HistoryPage from '@/pages/HistoryPage.vue';
 import UserPage from '@/pages/UserPage.vue';
 
 import { useUserStore } from '@/stores';
@@ -31,7 +32,15 @@ const routes: Array<RouteRecordRaw> = [
         name: 'reservation',
         component: ReservationPage,
         meta: {
-          title: '預約管理',
+          title: '新增預約',
+        },
+      },
+      {
+        path: '/history',
+        name: 'history',
+        component: HistoryPage,
+        meta: {
+          title: '管理預約',
         },
       },
       {
