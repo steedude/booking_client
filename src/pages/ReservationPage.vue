@@ -16,6 +16,8 @@
           v-model:current-reservation="currentReservation"
           :current-day="day"
           :events="reservations"
+          :is-loading="isLoading"
+          @delete-reservation="deleteReservation"
         />
         <el-button
           type="primary"
@@ -63,7 +65,7 @@ import { storeToRefs } from 'pinia';
 import { useProductStore, useUserStore } from '@/stores';
 import ReservationSchedule from '@/components/reservationPage/ReservationSchedule.vue';
 import UserInfoSettingPopup from '@/components/reservationPage/UserInfoSettingPopup.vue';
-import { fetchReservationsApi, postReservationApi } from '@/apis/reservation';
+import { fetchReservationsApi, postReservationApi, deleteReservationsApi } from '@/apis/reservation';
 import { formatTime } from '@/utils/moment';
 import type { Reservation } from '@/types/reservation';
 
@@ -85,10 +87,7 @@ function fetchReservations() {
       currentReservation.value = undefined;
     })
     .catch(error => {
-      ElMessage({
-        message: error.message,
-        type: 'error',
-      });
+      ElMessage({ message: error.message, type: 'error' });
     })
     .finally(() => {
       isLoading.value = false;
@@ -126,13 +125,25 @@ function reserveMeetingRoom() {
       });
     })
     .catch(error => {
-      ElMessage({
-        message: error.message,
-        type: 'error',
-      });
+      ElMessage({ message: error.message, type: 'error' });
     })
     .finally(() => {
       isReserving.value = false;
+    });
+}
+
+function deleteReservation(reservationId: string) {
+  isLoading.value = true;
+  deleteReservationsApi(reservationId)
+    .then(({ message }) => {
+      fetchReservations();
+      ElMessage({ message, type: 'success' });
+    })
+    .catch(error => {
+      ElMessage({ message: error.message, type: 'error' });
+    })
+    .finally(() => {
+      isLoading.value = false;
     });
 }
 
@@ -146,5 +157,3 @@ function disabledDate(date: Date) {
 useProductStore().fetchProducts();
 onMounted(fetchReservations);
 </script>
-
-<style scoped lang="postcss"></style>

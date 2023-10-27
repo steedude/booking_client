@@ -6,6 +6,7 @@ export const handlers = [
   mockUserApi.loginUser,
   mockUserApi.logoutUser,
   mockUserApi.postGoogleAuth,
+  mockUserApi.registerUser,
   mockUserApi.getTeamOptions,
   mockUserApi.setUserInfo,
   mockProductApi.fetchProducts,

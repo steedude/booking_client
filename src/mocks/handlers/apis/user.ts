@@ -80,6 +80,24 @@ const mockUserApi = {
     );
   }),
 
+  registerUser: rest.post('*/register', async (req: MockedRequest<LoginPayload>, res, ctx) => {
+    const { account, password } = await req.json();
+    return res(
+      ctx.status(200),
+      ctx.json({
+        message: 'success',
+        data: {
+          token: account + password,
+          user: {
+            account: `${account}@skylinetw.com`,
+            name: account,
+            team: 'PHP',
+          },
+        },
+      }),
+    );
+  }),
+
   getTeamOptions: rest.get('*/teams', (_, res, ctx) => {
     return res(
       ctx.status(200),

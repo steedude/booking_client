@@ -8,7 +8,7 @@
     :time-to="19 * 60"
     :time-step="30"
     :snap-to-time="30"
-    :editable-events="{ title: false, drag: false, resize: false, delete: true, create: true }"
+    :editable-events="{ title: false, drag: false, resize: false, delete: false, create: true }"
     :drag-to-create-threshold="0"
     :min-split-width="200"
     :min-event-width="100"
@@ -24,45 +24,72 @@
         `${view.startDate.getDate()}`.padStart(2, '0')
       }}
     </template>
+
+    <template #event="{ event }">
+      <div
+        v-if="userStore.team === event.title"
+        class="absolute right-0 top-0 cursor-pointer hover:text-red-700 hover:scale-150 transition-all"
+        @click="deleteBooked(event.content)"
+      >
+        <el-icon><Close /></el-icon>
+      </div>
+      <p class="vuecal__event-title">{{ event.title }}</p>
+      <div class="vuecal__event-time">
+        {{ event.start.formatTime() }}<span>&nbsp;- {{ event.end.formatTime() }}</span>
+      </div>
+    </template>
   </vue-cal>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { Close } from '@element-plus/icons-vue';
 import VueCal, { type Event } from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
-import { useProductStore } from '@/stores';
+import { useProductStore, useUserStore } from '@/stores';
 import { formatTime } from '@/utils/moment';
+import { groupBy } from '@/utils/tools';
+import { TEAM_EVENT_STYLE } from '@/configs/team';
 import type { Reservation } from '@/types/reservation';
 
 interface Props {
   currentDay: Date | string;
   events: Array<Reservation>;
   currentReservation?: Event;
+  isLoading?: boolean;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:currentReservation']);
+const emit = defineEmits(['update:currentReservation', 'deleteReservation']);
 const deleteReservation = ref<() => void>();
+const userStore = useUserStore();
 const products = computed(() => {
   return useProductStore().products.map(({ _id: id, name }) => {
     return { id, label: name };
   });
 });
 const booked = computed(() => {
-  return props.events.map(event => {
-    const { _id: productId } = event.product;
+  const groupedEvents = groupBy(props.events, 'team');
 
-    return {
-      start: formatTime(event.start_time),
-      end: formatTime(event.end_time),
-      title: event.team,
-      class: 'booked',
-      split: productId,
-      resizing: false,
-    };
-  });
+  return Object.keys(groupedEvents)
+    .map((team: string, index: number) => {
+      return groupedEvents[`${team}`].map(event => {
+        const { _id: productId } = event.product;
+        const { _id: reservationId } = event;
+
+        return {
+          start: formatTime(event.start_time),
+          end: formatTime(event.end_time),
+          title: event.team,
+          class: `booked ${TEAM_EVENT_STYLE[index] ?? 'bg-[rgb(164,230,210)] border-[rgb(144,210,190)]'}`,
+          content: reservationId,
+          split: productId,
+          resizing: false,
+        };
+      });
+    })
+    .flat();
 });
 
 function onCreateReservation(event: Event, deleteEvent: () => void): Event | null {
@@ -103,6 +130,16 @@ function removeReservation(message: string) {
   deleteReservation.value?.();
   emit('update:currentReservation', undefined);
 }
+
+function deleteBooked(id: string) {
+  if (props.isLoading) return;
+  ElMessageBox.confirm('確認要取消此預約時段嗎？', '提示', {
+    confirmButtonText: '確認',
+    cancelButtonText: '取消',
+  }).then(() => {
+    emit('deleteReservation', id);
+  });
+}
 </script>
 
 <style lang="postcss" scoped>
@@ -131,7 +168,7 @@ function removeReservation(message: string) {
 :deep(.vuecal__event) {
   @apply font-bold bg-[rgba(253,156,66,0.9)] border-2 border-[rgb(233,136,46)] text-white;
   &.booked {
-    @apply font-bold bg-[rgba(164,230,210,0.9)] border-2 border-[rgb(144,210,190)] text-[#666];
+    @apply text-[#666] flex flex-col justify-center items-center opacity-90;
   }
 }
 

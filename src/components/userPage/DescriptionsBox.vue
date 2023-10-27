@@ -43,9 +43,9 @@
         @save="setTeamFunc(teamId)"
         @edit="getTeamOptions"
       >
-        <team-selector
-          ref="teamSelectorElement"
+        <item-selector
           v-model="teamId"
+          :options="teamOptions"
           :placeholder="props.team || '尚未設置'"
           :disabled="!isEditing"
         />
@@ -57,7 +57,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import EditBox from '@/components/userPage/EditBox.vue';
-import TeamSelector from '@/components/common/TeamSelector.vue';
+import ItemSelector from '@/components/common/ItemSelector.vue';
+import { getTeamOptionsApi } from '@/apis/user';
+import type { TeamOption } from '@/types/user';
 
 const props = defineProps<{
   account: string;
@@ -66,15 +68,19 @@ const props = defineProps<{
   setUserInfo: Function;
 }>();
 
-const teamSelectorElement = ref();
 const teamId = ref('');
+const teamOptions = ref<TeamOption[]>([]);
 
 function setNameFunc(name: string) {
   props.setUserInfo(name);
 }
 
-function getTeamOptions() {
-  teamSelectorElement.value.getTeamOptions();
+async function getTeamOptions(): Promise<void> {
+  if (teamOptions.value.length) return;
+
+  const getTeamOptionsResult = await getTeamOptionsApi();
+  const teamOptionsData: TeamOption[] = getTeamOptionsResult.data;
+  teamOptions.value = teamOptionsData;
 }
 
 function setTeamFunc(team: string) {

@@ -10,23 +10,20 @@
     <el-form
       ref="userFormRef"
       :model="userForm"
+      label-width="60px"
     >
       <el-form-item
         label="組別"
         :rules="teamRules"
         prop="team"
-        label-width="60px"
       >
-        <team-selector
-          ref="teamSelectorElement"
+        <item-selector
           v-model="userForm.team"
+          :options="teamOptions"
           placeholder="尚未設置"
         />
       </el-form-item>
-      <el-form-item
-        label="暱稱"
-        label-width="60px"
-      >
+      <el-form-item label="暱稱">
         <el-input
           v-model="userForm.name"
           autocomplete="off"
@@ -48,13 +45,15 @@
 <script lang="ts" setup>
 import { ref, reactive, computed } from 'vue';
 import { useUserStore } from '@/stores';
-import TeamSelector from '@/components/common/TeamSelector.vue';
+import ItemSelector from '@/components/common/ItemSelector.vue';
 import type { FormInstance } from 'element-plus';
+import { getTeamOptionsApi } from '@/apis/user';
+import type { TeamOption } from '@/types/user';
 
 const userStore = useUserStore();
 
-const teamSelectorElement = ref();
 const userFormRef = ref<FormInstance>();
+const teamOptions = ref<TeamOption[]>([]);
 const userForm = reactive({
   name: userStore.name,
   team: '',
@@ -72,8 +71,12 @@ const showUserInfoSettingPopup = computed({
   set: value => emit('update:modelValue', value),
 });
 
-function getTeamOptions() {
-  teamSelectorElement.value.getTeamOptions();
+async function getTeamOptions(): Promise<void> {
+  if (teamOptions.value.length) return;
+
+  const getTeamOptionsResult = await getTeamOptionsApi();
+  const teamOptionsData: TeamOption[] = getTeamOptionsResult.data;
+  teamOptions.value = teamOptionsData;
 }
 
 function setTeam(userFormInstance: FormInstance | undefined) {
