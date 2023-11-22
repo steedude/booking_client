@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 const mockReservationApi = {
-  fetchReservations: rest.get('*/reservations', (_req, res, ctx) => {
+  fetchReservations: rest.get('*/reservations/day', (_req, res, ctx) => {
     const currentDay = new Date().toJSON().slice(0, 10);
 
     return res(

@@ -27,8 +27,8 @@
 
     <template #event="{ event }">
       <div
-        v-if="userStore.team === event.title"
-        class="absolute right-0 top-0 cursor-pointer hover:text-red-700 hover:scale-150 transition-all"
+        v-if="userStore.team && userStore.team === event.title"
+        class="absolute right-0 top-0 cursor-pointer hover:text-red-700 hover:scale-125 transition-all"
         @click="deleteBooked(event.content)"
       >
         <el-icon><Close /></el-icon>

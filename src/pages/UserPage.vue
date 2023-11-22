@@ -6,8 +6,7 @@
     />
   </div>
   <div class="flex justify-center">
-    <DescriptionBox
-      ref="descriptionBox"
+    <UserDescriptions
       :account="userStore.account"
       :name="userStore.name"
       :team="userStore.team"
@@ -18,7 +17,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores';
-import DescriptionBox from '@/components/userPage/DescriptionsBox.vue';
+import UserDescriptions from '@/components/userPage/UserDescriptions.vue';
 
 const userStore = useUserStore();
 </script>

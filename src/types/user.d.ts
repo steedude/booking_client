@@ -24,3 +24,7 @@ export interface TeamOption {
   _id: string;
   name: string;
 }
+
+export interface PasswordPayload {
+  password: string;
+}

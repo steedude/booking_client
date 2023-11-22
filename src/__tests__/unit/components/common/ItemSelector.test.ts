@@ -4,7 +4,7 @@ import { createTestingPinia } from '@pinia/testing';
 import ElementPlus from 'element-plus';
 import ItemSelector from '@/components/common/ItemSelector.vue';
 
-const teamOptions = [
+const TEAM_OPTIONS = [
   { _id: 'a123', name: 'Vue' },
   { _id: 'b456', name: 'PHP' },
   { _id: 'c789', name: 'JAVA' },
@@ -17,7 +17,7 @@ function setup(): void {
     },
     props: {
       modelValue: 'Vue',
-      options: teamOptions,
+      options: TEAM_OPTIONS,
     },
   });
 }

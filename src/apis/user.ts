@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type { LoginPayload, GoogleAuthPayload, UserInfoPayload } from '@/types/user';
+import type { LoginPayload, GoogleAuthPayload, UserInfoPayload, PasswordPayload } from '@/types/user';
 
 export function loginUserApi(data: LoginPayload) {
   return request.post('/login', data);
@@ -27,4 +27,8 @@ export function setUserInfoApi(data: UserInfoPayload) {
 
 export function getTeamOptionsApi() {
   return request.get('/teams');
+}
+
+export function changePasswordApi(data: PasswordPayload) {
+  return request.post('/password', data);
 }

@@ -1,6 +1,6 @@
 <template>
   <el-descriptions
-    class="w-3/4"
+    class="w-1/2"
     :column="2"
     border
   >
@@ -15,12 +15,11 @@
       label="密碼"
       :span="2"
       align="center"
-      >*********
-      <!-- <el-button
-        type="primary"
-        size="small"
-        >變更密碼</el-button
-      > -->
+    >
+      <PasswordEditArea
+        :value="PASSWORD"
+        @save="setNameFunc"
+      />
     </el-descriptions-item>
     <el-descriptions-item
       label="暱稱"
@@ -57,6 +56,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import EditBox from '@/components/userPage/EditBox.vue';
+import PasswordEditArea from '@/components/userPage/PasswordEditArea.vue';
 import ItemSelector from '@/components/common/ItemSelector.vue';
 import { getTeamOptionsApi } from '@/apis/user';
 import type { TeamOption } from '@/types/user';
@@ -70,6 +70,7 @@ const props = defineProps<{
 
 const teamId = ref('');
 const teamOptions = ref<TeamOption[]>([]);
+const PASSWORD = '*********';
 
 function setNameFunc(name: string) {
   props.setUserInfo(name);

@@ -21,7 +21,7 @@ describe('AuthenticationPage', () => {
   });
 
   it('Login', async () => {
-    const loginAccount = {
+    const LOGIN_ACCOUNT = {
       account: 'josh@skylinetw.com',
       password: 'password',
       checkPass: '',
@@ -29,24 +29,24 @@ describe('AuthenticationPage', () => {
 
     const accountInput = screen.getAllByLabelText('account')[0] as HTMLInputElement;
     await user.click(accountInput);
-    await user.keyboard(loginAccount.account);
-    expect(accountInput.value).toBe(loginAccount.account);
+    await user.keyboard(LOGIN_ACCOUNT.account);
+    expect(accountInput.value).toBe(LOGIN_ACCOUNT.account);
 
     const passwordInput = screen.getAllByLabelText('Password')[0] as HTMLInputElement;
     await user.click(passwordInput);
-    await user.keyboard(loginAccount.password);
-    expect(passwordInput.value).toBe(loginAccount.password);
+    await user.keyboard(LOGIN_ACCOUNT.password);
+    expect(passwordInput.value).toBe(LOGIN_ACCOUNT.password);
 
     const loginButton = screen.getByRole('button', { name: /登入/i });
     await user.click(loginButton);
 
     const { loginUser } = useUserStore();
     expect(loginUser).toHaveBeenCalledTimes(1);
-    expect(loginUser).toHaveBeenCalledWith(loginAccount);
+    expect(loginUser).toHaveBeenCalledWith(LOGIN_ACCOUNT);
   });
 
   it('Register', async () => {
-    const registerAccount = {
+    const REGISTER_ACCOUNT = {
       account: 'josh@skylinetw.com',
       password: 'password',
       checkPass: 'password',
@@ -59,18 +59,18 @@ describe('AuthenticationPage', () => {
 
     const accountInput = screen.getAllByLabelText('account')[1] as HTMLInputElement;
     await user.click(accountInput);
-    await user.keyboard(registerAccount.account);
-    expect(accountInput.value).toBe(registerAccount.account);
+    await user.keyboard(REGISTER_ACCOUNT.account);
+    expect(accountInput.value).toBe(REGISTER_ACCOUNT.account);
 
     const passwordInput = screen.getAllByLabelText('Password')[1] as HTMLInputElement;
     await user.click(passwordInput);
-    await user.keyboard(registerAccount.password);
-    expect(passwordInput.value).toBe(registerAccount.password);
+    await user.keyboard(REGISTER_ACCOUNT.password);
+    expect(passwordInput.value).toBe(REGISTER_ACCOUNT.password);
 
     const confirmInput = screen.getByLabelText('Confirm') as HTMLInputElement;
     await user.click(confirmInput);
-    await user.keyboard(registerAccount.checkPass);
-    expect(confirmInput.value).toBe(registerAccount.checkPass);
+    await user.keyboard(REGISTER_ACCOUNT.checkPass);
+    expect(confirmInput.value).toBe(REGISTER_ACCOUNT.checkPass);
 
     expect(passwordInput.value).toBe(confirmInput.value);
 
@@ -79,6 +79,6 @@ describe('AuthenticationPage', () => {
 
     const { registerUser } = useUserStore();
     expect(registerUser).toHaveBeenCalledTimes(1);
-    expect(registerUser).toHaveBeenCalledWith(registerAccount);
+    expect(registerUser).toHaveBeenCalledWith(REGISTER_ACCOUNT);
   });
 });
