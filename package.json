@@ -4,15 +4,15 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
+    "start": "vite --mode prod",
     "dev:mock": "MOCK=true vite",
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc && vite build --mode prod",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore --fix .",
     "test:unit": "vitest --coverage",
     "test:e2e": "playwright test --headed",
     "test:ui-e2e": "playwright test --ui",
     "test:ci-e2e": "playwright test",
-    "prepare": "husky install",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -3,7 +3,7 @@ import enUS from '@/locales/en-US.json';
 import zhTW from '@/locales/zh-TW.json';
 
 const i18n = createI18n({
-  legacy: import.meta.env.MODE === 'test',
+  legacy: import.meta.env.MODE === 'dev',
   locale: navigator.language,
   fallbackLocale: 'en-US',
   messages: {

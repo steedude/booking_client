@@ -29,7 +29,7 @@
   </p>
   <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
   <p class="read-the-docs">{{ version }}</p>
-  <button @click="changeLocale">{{ $t('language') }}</button>
+  <button @click="changeLocale">{{ t('language') }}</button>
 </template>
 
 <script setup lang="ts">
@@ -39,7 +39,7 @@ import { useConfigStore } from '@/stores';
 
 defineProps<{ msg: string }>();
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const { version } = useConfigStore();
 const count = ref(0);
 

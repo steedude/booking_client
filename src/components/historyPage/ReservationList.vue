@@ -63,7 +63,7 @@ defineProps<{
 
 const emit = defineEmits(['cancel']);
 
-function cancelReservation(id) {
+function cancelReservation(id: string) {
   emit('cancel', id);
 }
 </script>

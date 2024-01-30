@@ -81,7 +81,7 @@ const ruleForm = reactive({
   checkPass: '',
 });
 
-const validatePass = (rule: any, value: any, callback: any) => {
+const validatePass = (_: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('Please input the password again'));
   } else if (value !== ruleForm.password) {
