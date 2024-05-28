@@ -1,6 +1,6 @@
 <template>
   <div class="h-full w-full">
-    <h1>Skyline 會議室預約系統</h1>
+    <h1>會議室預約系統</h1>
     <div class="flex justify-center items-center py-10">
       <div class="w-full flex flex-col justify-center items-center gap-5 px-10">
         <el-date-picker
