@@ -23,5 +23,13 @@
   },
   "files.associations": {},
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["dotenv", "pinia", "postcss", "vant"]
+  "cSpell.words": [
+    "dotenv",
+    "pinia",
+    "postcss",
+    "vant"
+  ],
+  "i18n-ally.localesPaths": [
+    "src/locales"
+  ]
 }
